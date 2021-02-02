@@ -18,8 +18,8 @@ public class MyFirstProgram {
 
     System.out.println("Точка 1 имеет координаты: " + p1.x + " и " + p1.y);
     System.out.println("Точка 2 имеет координаты: " + p2.x + " и " + p2.y);
-    System.out.println("Расстояние между этими двумя точками = " + distance(p1, p2) + " (вычислено функцией)");
-    System.out.println("Расстояние между этими двумя точками = " + p1.distance(p2) + " (вычислено методом класса)");
+    System.out.println("Расстояние между этими двумя точками = " + String.format("%.2f", distance(p1, p2)) + " (вычислено функцией)");
+    System.out.println("Расстояние между этими двумя точками = " + String.format("%.2f", p1.distance(p2)) + " (вычислено методом класса)");
   }
 
   public static void hello(String somebody) {
