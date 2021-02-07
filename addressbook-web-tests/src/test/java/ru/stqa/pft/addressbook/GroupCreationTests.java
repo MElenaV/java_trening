@@ -1,6 +1,7 @@
 package ru.stqa.pft.addressbook;
 
 import java.util.concurrent.TimeUnit;
+
 import org.testng.annotations.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -35,10 +36,6 @@ public class GroupCreationTests {
     returnToGroupPage();
   }
 
-  private void logout() {
-    wd.findElement(By.linkText("Logout")).click();
-  }
-
   private void returnToGroupPage() {
     wd.findElement(By.linkText("group page")).click();
   }
@@ -65,6 +62,10 @@ public class GroupCreationTests {
 
   private void gotoGroupPage() {
     wd.findElement(By.linkText("groups")).click();
+  }
+
+  private void logout() {
+    wd.findElement(By.linkText("Logout")).click();
   }
 
   @AfterMethod
