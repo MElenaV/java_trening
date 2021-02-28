@@ -7,11 +7,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 public class ContactHelper extends HelperBase {
 
   public ContactHelper(WebDriver wd) {
     super(wd);
+  }
+
+  private GroupHelper groupHelper;
+  public GroupHelper getGroupHelper() {
+    return groupHelper;
+  }
+  //groupHelper = new GroupHelper(wd);
+
+  public void returnToContactPage() {
+    click(By.linkText("home"));
   }
 
   public void submitContactCreation() {
@@ -51,5 +62,16 @@ public class ContactHelper extends HelperBase {
 
   public void submitContactModification() {
     click(By.xpath("//input[@value='Update']"));
+  }
+
+  public void createContact(ContactData contact, boolean b) {
+    initContactCreation();
+    fillContactForm(contact, true);
+    submitContactCreation();
+    returnToContactPage();
+  }
+
+  public boolean isThereAContact() {
+    return isElementPresent(By.name("selected[]"));
   }
 }
