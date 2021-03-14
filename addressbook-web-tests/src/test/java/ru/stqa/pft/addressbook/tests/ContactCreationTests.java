@@ -18,7 +18,7 @@ public class ContactCreationTests extends TestBase {
             .withLastname("Petrovich")
             .withAddress("St. Petersburg")
             .withHomePhone("245-98-12")
-            .withEmail("petr@mail.ru")
+            .withAllEmail("petr@mail.ru")
             .withGroup("test2");
     app.contact().create(contact, true);
     Contacts after = app.contact().all();
