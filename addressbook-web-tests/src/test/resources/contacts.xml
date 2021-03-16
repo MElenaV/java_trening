@@ -5,6 +5,7 @@
     <address>Moscow, Belinka street, 70</address>
     <homePhone>221-34-10</homePhone>
     <email1>ivan0@mail.ru</email1>
+    <group>test2</group>
   </contact>
   <contact>
     <firstname>Ivan1</firstname>
@@ -12,6 +13,7 @@
     <address>Moscow, Belinka street, 71</address>
     <homePhone>221-34-11</homePhone>
     <email1>ivan1@mail.ru</email1>
+    <group>test2</group>
   </contact>
   <contact>
     <firstname>Ivan2</firstname>
@@ -19,5 +21,6 @@
     <address>Moscow, Belinka street, 72</address>
     <homePhone>221-34-12</homePhone>
     <email1>ivan2@mail.ru</email1>
+    <group>test2</group>
   </contact>
 </list>
