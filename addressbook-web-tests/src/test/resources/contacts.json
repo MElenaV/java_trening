@@ -1,0 +1,23 @@
+[
+  {
+    "firstname": "Ivan0",
+    "lastname": "Ivanovich0",
+    "address": "Moscow, Belinka street, 70",
+    "homePhone": "221-34-10",
+    "email1": "ivan0@mail.ru"
+  },
+  {
+    "firstname": "Ivan1",
+    "lastname": "Ivanovich1",
+    "address": "Moscow, Belinka street, 71",
+    "homePhone": "221-34-11",
+    "email1": "ivan1@mail.ru"
+  },
+  {
+    "firstname": "Ivan2",
+    "lastname": "Ivanovich2",
+    "address": "Moscow, Belinka street, 72",
+    "homePhone": "221-34-12",
+    "email1": "ivan2@mail.ru"
+  }
+]
