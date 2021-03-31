@@ -3,41 +3,80 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
 @XStreamAlias("contact")
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
   @XStreamOmitField
+  @Id
+  @Column(name = "id")       // можно было эту привязка к столбцу таблицы не делать, т.к. название столбца таблицы совпадает с названием атрибута
   private int id = Integer.MAX_VALUE;
+
   @Expose
+  @Column(name = "firstname")       // можно было эту привязка к столбцу таблицы не делать, т.к. название столбца таблицы совпадает с названием атрибута
   private String firstname;
+
   @Expose
+  @Column(name = "lastname")        // можно было эту привязка к столбцу таблицы не делать, т.к. название столбца таблицы совпадает с названием атрибута
   private String lastname;
+
   @Expose
+  @Type(type = "text")
   private String address;
+
   @Expose
+  @Column(name = "home")
+  @Type(type = "text")
   private String homePhone;
+
+  @Column(name = "mobile")
+  @Type(type = "text")
   private String mobilePhone;
+
+  @Column(name = "work")
+  @Type(type = "text")
   private String workPhone;
-  private String allPhones;
+
   @Expose
+  @Column(name = "email")
+  @Type(type = "text")
   private String email1;
+
+  @Column(name = "email2")
+  @Type(type = "text")
   private String email2;
+
+  @Column(name = "email3")
+  @Type(type = "text")
   private String email3;
+
+  @Transient
   private String allEmail;
+
   @Expose
+  @Transient        // этой аннотацией помечаем поле, чтобы оно было пропущено (не извлекалось из БД, т.к. его там нет)
   private String group;
+
+  @Transient
+  private String allPhones;
+
   @Expose
-  private File photo;
+  @Column(name = "photo")
+  @Type(type = "text")
+  private String photo;       // атрибут имеет тип файл, но в БД хранится строка, поэтому преобразуем в String (а getter и setter преобразуем в файл, чтобы ничего не поломать)
 
   public File getPhoto() {
-    return photo;
+    return new File(photo);
   }
 
   public ContactData withPhoto(File photo) {
-    this.photo = photo;
+    this.photo = photo.getPath();
     return this;
   }
 
