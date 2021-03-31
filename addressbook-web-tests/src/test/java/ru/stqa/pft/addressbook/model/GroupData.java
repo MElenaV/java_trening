@@ -3,18 +3,35 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Objects;
 
 @XStreamAlias("group")
+@Entity       // аннотация объявляет класс GroupData привязанным к БД
+@Table(name = "group_list")       // сопоставление класса к таблице БД, т.к. названия отличаются
 public class GroupData {
   @XStreamOmitField
+  @Id       // атрибут id используется как идентификатор, поэтому ему присваивается особоая аннотация - подсказка ID
+  @Column(name = "group_id")       // привязка к столбцу таблицы, т.к. название столбца не совпадает с названием атрибута
   private int id = Integer.MAX_VALUE;
+
   @Expose
+  @Column(name = "group_name")       // привязка к столбцу таблицы, т.к. название столбца не совпадает с названием атрибута
   private String name;
+
   @Expose
+  @Column(name = "group_header")
+  @Type(type = "text")
   private String header;
+
   @Expose
+  @Column(name = "group_footer")
+  @Type(type = "text")        // поля с footer многострочные, поэтому в БД они хранятся иначе; сделали подсказку, т.к. hibernate не смог автоматически сделать преобразование типов
   private String footer;
 
   public int getId() { return id; }
