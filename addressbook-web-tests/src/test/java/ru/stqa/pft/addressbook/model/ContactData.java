@@ -72,7 +72,41 @@ public class ContactData {
   private String photo;       // атрибут имеет тип файл, но в БД хранится строка, поэтому преобразуем в String (а getter и setter преобразуем в файл, чтобы ничего не поломать)
 
   public File getPhoto() {
-    return new File(photo);
+    if (photo == null) {
+      return null;
+    } else {
+      return new File(photo);
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (firstname == null || lastname == null || address == null || homePhone == null || mobilePhone == null || workPhone == null || email1 == null || email2 == null || email3 == null) return true;
+    ContactData that = (ContactData) o;
+    return id == that.id && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname) && Objects.equals(address, that.address) && Objects.equals(homePhone, that.homePhone) && Objects.equals(mobilePhone, that.mobilePhone) && Objects.equals(workPhone, that.workPhone) && Objects.equals(email1, that.email1) && Objects.equals(email2, that.email2) && Objects.equals(email3, that.email3);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, firstname, lastname, address, homePhone, mobilePhone, workPhone, email1, email2, email3);
+  }
+
+  @Override
+  public String toString() {
+    return "ContactData{" +
+            "id=" + id +
+            ", firstname='" + firstname + '\'' +
+            ", lastname='" + lastname + '\'' +
+            ", address='" + address + '\'' +
+            ", homePhone='" + homePhone + '\'' +
+            ", mobilePhone='" + mobilePhone + '\'' +
+            ", workPhone='" + workPhone + '\'' +
+            ", email1='" + email1 + '\'' +
+            ", email2='" + email2 + '\'' +
+            ", email3='" + email3 + '\'' +
+            '}';
   }
 
   public ContactData withPhoto(File photo) {
@@ -173,7 +207,7 @@ public class ContactData {
 
   public String getEmail1() {    return email1;  }
 
-  public String getEmail2() {   return email2;  }
+  public String getEmail2() { return email2;   }
 
   public String getEmail3() {  return email3;  }
 
@@ -184,27 +218,5 @@ public class ContactData {
   public String getGroup() { return group; }
 
   public int getId() { return id; }
-
-  @Override
-  public String toString() {
-    return "ContactData{" +
-            "firstname='" + firstname + '\'' +
-            ", lastname='" + lastname + '\'' +
-            ", id=" + id +
-            '}';
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    ContactData that = (ContactData) o;
-    return id == that.id && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(firstname, lastname, id);
-  }
 
 }
