@@ -15,7 +15,9 @@ public class ContactModificationTests extends TestBase {
     if (app.db().contacts().size() == 0) {
       app.goTo().contactPage();
       app.contact().create(new ContactData()
-              .withFirstname("Petr").withLastname("Petrovich").withAddress("St. Petersburg").withHomePhone("245-98-12").withGroup("test2"), true);
+              .withFirstname("Petr").withLastname("Petrovich").withAddress("St. Petersburg")
+              .withHomePhone("245-98-12").withMobilePhone("89601652303").withWorkPhone("2488808")
+              .withEmail1("petr1@mail.ru").withEmail2("petr2@mail.ru").withEmail3("petr3@mail.ru").withGroup("test2"), true);
     }
   }
 
@@ -24,19 +26,18 @@ public class ContactModificationTests extends TestBase {
     Contacts before = app.db().contacts();
     ContactData modifiedContact = before.iterator().next();
     ContactData contact = new ContactData()
-            .withId(modifiedContact.getId()).withFirstname("Ivan").withLastname("Ivanovich").withHomePhone("89301456532").withAddress("Moscow");
+            .withId(modifiedContact.getId()).withFirstname("Ivan").withLastname("Ivanovich").withAddress("Moscow").withHomePhone("89301456532");
     app.goTo().contactPage();
     app.contact().modify(contact, false);
     Contacts after = app.db().contacts();
 
     assertThat(after.size(), equalTo(before.size()));
    ContactData expectedAfterModification = contact
-            .withHomePhone(contact.getHomePhone())
-            .withMobilePhone(contact.getMobilePhone())
-            .withWorkPhone(contact.getWorkPhone())
-            .withEmail1(contact.getEmail1())
-            .withEmail2(contact.getEmail2())
-            .withEmail3(contact.getEmail3());
+            .withMobilePhone(modifiedContact.getMobilePhone())
+            .withWorkPhone(modifiedContact.getWorkPhone())
+            .withEmail1(modifiedContact.getEmail1())
+            .withEmail2(modifiedContact.getEmail2())
+            .withEmail3(modifiedContact.getEmail3());
     Contacts expected = before.without(modifiedContact).withAdded(expectedAfterModification);
     assertThat(after, equalTo(expected));
 //    assertThat(after, equalTo(before.without(modifiedContact).withAdded(contact)));

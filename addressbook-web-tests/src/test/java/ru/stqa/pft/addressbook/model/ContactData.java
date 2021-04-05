@@ -35,10 +35,12 @@ public class ContactData {
   @Type(type = "text")
   private String homePhone;
 
+  @Expose
   @Column(name = "mobile")
   @Type(type = "text")
   private String mobilePhone;
 
+  @Expose
   @Column(name = "work")
   @Type(type = "text")
   private String workPhone;
@@ -48,10 +50,12 @@ public class ContactData {
   @Type(type = "text")
   private String email1;
 
+  @Expose
   @Column(name = "email2")
   @Type(type = "text")
   private String email2;
 
+  @Expose
   @Column(name = "email3")
   @Type(type = "text")
   private String email3;
@@ -66,7 +70,6 @@ public class ContactData {
   @Transient
   private String allPhones;
 
-  @Expose
   @Column(name = "photo")
   @Type(type = "text")
   private String photo;       // атрибут имеет тип файл, но в БД хранится строка, поэтому преобразуем в String (а getter и setter преобразуем в файл, чтобы ничего не поломать)
@@ -81,10 +84,9 @@ public class ContactData {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    if (firstname == null || lastname == null || address == null || homePhone == null || mobilePhone == null || workPhone == null || email1 == null || email2 == null || email3 == null) return true;
     ContactData that = (ContactData) o;
+    if (this == o || firstname == null || lastname == null || address == null || homePhone == null || mobilePhone == null || workPhone == null || email1 == null || email2 == null || email3 == null) return true;
     return id == that.id && Objects.equals(firstname, that.firstname) && Objects.equals(lastname, that.lastname) && Objects.equals(address, that.address) && Objects.equals(homePhone, that.homePhone) && Objects.equals(mobilePhone, that.mobilePhone) && Objects.equals(workPhone, that.workPhone) && Objects.equals(email1, that.email1) && Objects.equals(email2, that.email2) && Objects.equals(email3, that.email3);
   }
 

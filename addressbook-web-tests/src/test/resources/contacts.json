@@ -4,7 +4,11 @@
     "lastname": "Ivanovich0",
     "address": "Moscow, Belinka street, 70",
     "homePhone": "221-34-10",
-    "email1": "ivan0@mail.ru",
+    "mobilePhone": "89101928373",
+    "workPhone": "2489865",
+    "email1": "ivan@mail.ru",
+    "email2": "ivan02@mail.ru",
+    "email3": "ivan03@mail.ru",
     "group": "test2"
   }
 ]
