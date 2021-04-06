@@ -60,6 +60,7 @@ public class GroupCreationTests extends TestBase {
     Groups after = app.db().groups();
     assertThat(after, equalTo(
             before.withAdded(group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
+    verifyGroupListInUI();
   }
 
   @Test
@@ -71,6 +72,7 @@ public class GroupCreationTests extends TestBase {
     assertThat(app.group().count(), equalTo(before.size()));        // проверка реализует хеширование (быстрая проверка перед более медленной) теперь не очень нужна, но оставим, чтобы минимально контролировать пользовательский интерфейс
     Groups after = app.db().groups();
     assertThat(after, equalTo(before));
+    verifyGroupListInUI();
   }
 
 }

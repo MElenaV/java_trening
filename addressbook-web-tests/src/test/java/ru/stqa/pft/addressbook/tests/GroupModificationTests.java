@@ -15,7 +15,7 @@ public class GroupModificationTests extends TestBase {
   public void ensurePrecondition(){
     if (app.db().groups().size() == 0) {
       app.goTo().groupPage();
-      app.group().create(new GroupData().withName("test1"));
+      app.group().create(new GroupData().withName("test2"));
     }
   }
 
@@ -30,7 +30,9 @@ public class GroupModificationTests extends TestBase {
     assertThat(app.group().count(), equalTo(before.size()));        // проверка реализует хеширование (быстрая проверка перед более медленной) теперь не очень нужна, но оставим, чтобы минимально контролировать пользовательский интерфейс
     Groups after = app.db().groups();
     assertThat(after, equalTo(before.without(modifiedGroup).withAdded(group)));
+    verifyGroupListInUI();
   }
+
 
 
 }
