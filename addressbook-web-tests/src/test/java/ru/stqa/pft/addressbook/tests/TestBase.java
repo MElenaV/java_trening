@@ -8,6 +8,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
+import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
@@ -54,7 +56,19 @@ public class TestBase {
               .map((g) -> new GroupData().withId(g.getId()).withName(g.getName()))    // функциональное программирование: ко всем элементам коллекции (данным загруженным из БД) применяем ф-ию, которая их упрощает. Stream и прим-ем ко всем элементам ф-ию map (анонимная ф-ия, которая принимает на вход группу, а на выходе новый объект типа GroupData с идентификатором таким же как у преобразуемого объекта и именем).
               .collect(Collectors.toSet())));    // Затем собираем всё при помощи коллектора toSet()
     }
+  }
 
+  public void verifyContactListInUI() {
+    if (Boolean.getBoolean("verifyUI")) {
+      Contacts dbContacts = app.db().contacts();
+      Contacts uiContacts = app.contact().all();
+      assertThat(uiContacts, equalTo(dbContacts.stream()
+              .map((c) -> new ContactData().withId(c.getId()).withLastname(c.getLastname()).withFirstname(c.getFirstname()).withAddress(c.getAddress()))
+//                      .withEmail1(c.getEmail1()).withEmail2(c.getEmail2()).withEmail3(c.getEmail3())
+//                      .withHomePhone(c.getHomePhone()).withWorkPhone(c.getWorkPhone()).withMobilePhone(c.getMobilePhone()))
+              .collect(Collectors.toSet())));
+    }
   }
 
 }
+

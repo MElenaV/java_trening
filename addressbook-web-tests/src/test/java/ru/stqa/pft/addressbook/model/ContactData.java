@@ -7,7 +7,9 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias("contact")
 @Entity
@@ -63,9 +65,6 @@ public class ContactData {
   @Transient
   private String allEmail;
 
-  @Expose
-  @Transient        // этой аннотацией помечаем поле, чтобы оно было пропущено (не извлекалось из БД, т.к. его там нет)
-  private String group;
 
   @Transient
   private String allPhones;
@@ -73,6 +72,11 @@ public class ContactData {
   @Column(name = "photo")
   @Type(type = "text")
   private String photo;       // атрибут имеет тип файл, но в БД хранится строка, поэтому преобразуем в String (а getter и setter преобразуем в файл, чтобы ничего не поломать)
+
+  @ManyToMany(fetch = FetchType.EAGER)    // опция fetch по умолчанию имеет значение LAZY (из БД извлекается, как можно меньше информации, меняем её на EAGER, чтобы извлекалось больше инфы за один заход)
+  @JoinTable(name = "address_in_groups",
+          joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "group_id"))    // JoinTable - в качестве связующей таблицы используется; joinColumns - столбец, который указывает на объект текущего класса;  inverseJoinColumns - обратный столбец, который указывает на объект другого типа
+  private Set<GroupData> groups = new HashSet<GroupData>(); // согласно документации hibernate (https://docs.jboss.org/hibernate/orm/5.4/userguide) инициализируем свойство, создаём пустое множество
 
   public File getPhoto() {
     if (photo == null) {
@@ -177,11 +181,9 @@ public class ContactData {
     return this;
   }
 
-  public ContactData withGroup(String group) {
-    this.group = group;
-    return this;
+  public void withGroup(Set<GroupData> groups) {
+    this.groups = groups;
   }
-
 
   public String getFirstname() {
     return firstname;
@@ -217,8 +219,14 @@ public class ContactData {
     return allEmail;
   }
 
-  public String getGroup() { return group; }
+  public Groups getGroups() {    // сгенерили getter и изменили его, чтобы возвращал объекты типа Groups для этого внутри сделали преобразования: множества превратили в объект типа Groups (при этом создается копия)
+    return new Groups(groups);
+  }
 
   public int getId() { return id; }
 
+  public ContactData inGroup(GroupData group) {
+    groups.add(group);    // помечаем контакт, как добавленный в какую-то группу
+  return this;    // возвращаем this, чтобы можно было это вытягивать в цепочку
+  }
 }

@@ -5,11 +5,10 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @XStreamAlias("group")
 @Entity       // аннотация объявляет класс GroupData привязанным к БД
@@ -33,6 +32,13 @@ public class GroupData {
   @Column(name = "group_footer")
   @Type(type = "text")        // поля с footer многострочные, поэтому в БД они хранятся иначе; сделали подсказку, т.к. hibernate не смог автоматически сделать преобразование типов
   private String footer;
+
+  @ManyToMany(mappedBy = "groups")    // означает, что groups в парном классе ContactData нужно найти свойство или атрибут groups и оттуда взять описание связи между ними
+  private Set<ContactData> contacts = new HashSet<ContactData>();
+
+  public Contacts getContacts() {
+    return new Contacts(contacts);
+  }
 
   public int getId() { return id; }
 

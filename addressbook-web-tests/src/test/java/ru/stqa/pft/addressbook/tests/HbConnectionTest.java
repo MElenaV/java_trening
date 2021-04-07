@@ -40,11 +40,13 @@ public class HbConnectionTest {
   public void testHbConnection() { // тест на получение данных из БД, воспользовавшись механизмом объектно-реляционных преобразований (т.е. описали привязку объекта к таблице в базе - см.класс GroupData) и избавились от необходимости выполнять запросы на языке sql)
     Session session = sessionFactory.openSession();
     session.beginTransaction();
-    List<ContactData> result = session.createQuery( "from ContactData where deprecated = '0000-00-00'" ).list();
-    for (ContactData contact : result) {
-      System.out.println(contact);
-    }
+    List<ContactData> result = session.createQuery( "from ContactData where deprecated = '0000-00-00'" ).list();    // как только информация о контакте из БД извлекается (HbConectionTest) сразу извлекается информация о группе, с которой контакт связан: для этого в классе ContactData см. аннотацию ManyToMany указываем доп опцию fetch
     session.getTransaction().commit();
     session.close();
+
+    for (ContactData contact : result) {
+      System.out.println(contact);
+      System.out.println(contact.getGroups());
+    }
   }
 }

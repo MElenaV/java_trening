@@ -75,8 +75,8 @@ public class ContactDataGenerator {
               .withLastname(String.format("Ivanovich%s", i))
               .withAddress(String.format("Moscow, Belinka street, 7%s", i))
               .withHomePhone(String.format("221-34-1%s", i))
-              .withEmail1(String.format("ivan%s@mail.ru", i))
-              .withGroup(String.format("test2", i)));
+              .withEmail1(String.format("ivan%s@mail.ru", i)));
+        //      .withGroup(String.format("test2", i)));
     }
     return contacts;
   }

@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
 
@@ -37,10 +38,30 @@ public class ContactHelper extends HelperBase {
     attach(By.name("photo"), contactData.getPhoto());
 
     if (creation){
-      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      if (contactData.getGroups().size() > 0) {
+        // т.к. на форме создания контакта контакт можно добавить только в одну группу, то добавляем проверку:
+        Assert.assertTrue(contactData.getGroups().size() == 1); // в две разные группы контакт добавить нельзя, поэтому такие входные данные следует считать не валидными.
+        // если не указана никакая группа, никуда его не добавляем (не выбираем ничего из выпадающего списка)
+        // если указана одна группа, значит будем пытаться выбрать её из выпадающего списка
+        // если 2 или больше, то это недопустимая ситуация
+          new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
+      }
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
+  }
+
+  public void fillContactForm(ContactData contactData) {
+    type(By.name("firstname"), contactData.getFirstname());
+    type(By.name("lastname"), contactData.getLastname());
+    type(By.name("address"), contactData.getAddress());
+    type(By.name("home"), contactData.getHomePhone());
+    type(By.name("mobile"), contactData.getMobilePhone());
+    type(By.name("work"), contactData.getWorkPhone());
+    type(By.name("email"), contactData.getEmail1());
+    type(By.name("email2"), contactData.getEmail2());
+    type(By.name("email3"), contactData.getEmail3());
+    attach(By.name("photo"), contactData.getPhoto());
   }
 
   public void initContactCreation() {
@@ -71,6 +92,13 @@ public class ContactHelper extends HelperBase {
     returnToContactPage();
   }
 
+  public void create(ContactData contact) {
+    initContactCreation();
+    fillContactForm(contact);
+    submitContactCreation();
+    returnToContactPage();
+  }
+
   public void modify(ContactData contact, boolean b) {
     selectContactById(contact.getId());
     initContactModificationById(contact.getId());
@@ -83,6 +111,40 @@ public class ContactHelper extends HelperBase {
     selectContactById(contact.getId());
     deleteSelectedContacts();
     returnToContactPage();
+  }
+
+  public void addContactToGroup() {
+    click(By.name("add"));
+    returnToContactPage();
+  }
+
+  public void removeContactFromGroup() {
+    click(By.name("remove"));
+    returnToContactPage();
+  }
+
+  public void selectGroupForAdded(Contacts contactData) {
+    if (contactData.iterator().next().getGroups().size() > 1) {
+      Assert.assertTrue(contactData.iterator().next().getGroups().size() == 1);
+      new Select(wd.findElement(By.name("group"))).selectByVisibleText(contactData.iterator().next().getGroups().iterator().next().getName());
+    }
+  }
+  public void selectGroupForAdded(GroupData group) {
+   wd.findElement(By.xpath(String.format("//select[@name='to_group']/option[@value='%s']", group.getId()))).click();
+  }
+
+
+  public void selectGroupFromFilter(GroupData group) {
+    click(By.xpath(String.format("//select[@name='group']/option[text() = '%s']", group.getName())));;
+  }
+
+  public void selectContact(ContactData contact) {
+    click(By.xpath(String.format("//input[@type='checkbox'][@id='%s']", contact.getId())));
+  }
+
+  public void selectContactWithoutGroup(ContactData contact) {
+    new Select(wd.findElement(By.name("group"))).selectByVisibleText("[none]");
+    click(By.xpath(String.format("//input[@type='checkbox'][@id='%s']", contact.getId())));
   }
 
   public boolean isThereAContact() {

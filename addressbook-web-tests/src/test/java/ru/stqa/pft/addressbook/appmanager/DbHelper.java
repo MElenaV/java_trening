@@ -48,5 +48,49 @@ public class DbHelper {
     return new Contacts(result);
   }
 
+  public Contacts contactsWithoutGroups(){   //метод для получения списка контактов без групп
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery( "from ContactData where groups.size = 0 and deprecated = '0000-00-00'" ).list();
+    session.getTransaction().commit();
+    session.close();
+    return new Contacts(result);
+  }
+
+  public ContactData contactWithoutGroup() {   //метод для получения контакта без группы
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery("from ContactData where groups.size = 0 and deprecated = '0000-00-00'").list();
+    session.getTransaction().commit();
+    session.close();
+    return result.iterator().next();
+  }
+
+  public Contacts contactWithGroups (){   //метод для получения списка контактов с группами
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery( "from ContactData where groups.size > 0 and deprecated = '0000-00-00'" ).list();
+    session.getTransaction().commit();
+    session.close();
+    return new Contacts(result);
+  }
+
+  public ContactData contactInGroup() {    // метод для получения связи контакта с группой
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery(String.format("from ContactData where groups.size > 0 and deprecated = '0000-00-00'")).list();
+    session.getTransaction().commit();
+    session.close();
+    return result.iterator().next();
+  }
+
+  public ContactData contactById(int id) {    //метод для получения контакта с заданным идентификатором
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<ContactData> result = session.createQuery(String.format("from ContactData where id = %s ", id)).list();
+    session.getTransaction().commit();
+    session.close();
+    return result.iterator().next();
+  }
 
 }
