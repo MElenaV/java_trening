@@ -43,4 +43,12 @@ public class ApplicationManager {
   public void stop() {
     wd.quit();
   }
+
+  public HttpSession newSession(){    // инициализация помощника при каждом обращении (в момент конструирования создается экземпляр помощника)
+    return new HttpSession(this);
+  }
+
+  public String getProperty(String key) {    // в качестве параметра принимает имя свойства, которое нужно извлечь
+    return properties.getProperty(key);
+  }
 }
