@@ -24,16 +24,16 @@ public class HttpSession {
   }    // используем шаблон проектирования builder (вытягивание методов в цепочку - FloatInterface); в созданном объекте устанавливается стратегия перенаправления setRedirectStrategy (если её не устновить получим ответ 302 и должны будем сами перенаправление обрабатывать), чтобы httpClient автоматически выполнял все перенаправления - это можно сделать установив ему такую стратегию перенаправления - LaxRedirectStrategy()
 
   public boolean login(String username, String password) throws Exception {
-    HttpPost post = new HttpPost(app.getProperty("web.baseUrl") + "/login.php");
+    HttpPost post = new HttpPost (app.getProperty("web.baseUrl") + "login.php");
     List<NameValuePair> params = new ArrayList<>();
-    params.add(new BasicNameValuePair(username, "username"));
-    params.add(new BasicNameValuePair(password, "password"));
-    params.add(new BasicNameValuePair("securesession", "on"));
+    params.add(new BasicNameValuePair ("username", username));
+    params.add(new BasicNameValuePair ("password", password));
+    params.add(new BasicNameValuePair ("secure_session", "on"));
     params.add(new BasicNameValuePair("return", "index.php"));
     post.setEntity(new UrlEncodedFormEntity(params));
     CloseableHttpResponse response = httpClient.execute(post);
     String body = getTextForm(response);
-    return body.contains(String.format("<span class=\"italic\">%s</span>", username));
+    return body.contains(String.format("<span class=\"user-info\">%s</span>", username));
   }
   private String getTextForm(CloseableHttpResponse response) throws Exception {
     try {
@@ -44,9 +44,9 @@ public class HttpSession {
   }
 
   public boolean isLoggedInAs(String username) throws Exception {    // определяет какой пользователь сейчас залогинен
-    HttpGet get = new HttpGet(app.getProperty("webBaseUrl") + "/index.php");
+    HttpGet get = new HttpGet(app.getProperty("webBaseUrl") + "index.php");
     CloseableHttpResponse response = httpClient.execute(get);
     String body = getTextForm(response);
-    return body.contains(String.format("<span class=\"italic\">%s</span>", username));
+    return body.contains(String.format("<span class=\"user-info\">%s</span>", username));
   }
 }
