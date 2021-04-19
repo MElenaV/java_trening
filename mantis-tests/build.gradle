@@ -22,7 +22,7 @@ test {
         systemProperty 'target', "${target}"
     }
 
-    if (project.hasProperty('verifyUI')) {
+    if (project.hasProperty('verifyUI')) { // включает/отключает проверки через пользовательский интерфейс
         systemProperty 'veryfyUI', "${veryfyUI}"
     }
 

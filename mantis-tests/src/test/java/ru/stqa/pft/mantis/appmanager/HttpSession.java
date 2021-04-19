@@ -44,7 +44,7 @@ public class HttpSession {
   }
 
   public boolean isLoggedInAs(String username) throws Exception {    // определяет какой пользователь сейчас залогинен
-    HttpGet get = new HttpGet(app.getProperty("webBaseUrl") + "index.php");
+    HttpGet get = new HttpGet(app.getProperty("web.baseUrl") + "index.php");
     CloseableHttpResponse response = httpClient.execute(get);
     String body = getTextForm(response);
     return body.contains(String.format("<span class=\"user-info\">%s</span>", username));
