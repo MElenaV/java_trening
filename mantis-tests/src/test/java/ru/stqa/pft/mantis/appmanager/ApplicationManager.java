@@ -1,5 +1,6 @@
 package ru.stqa.pft.mantis.appmanager;
 
+import javafx.animation.AnimationTimer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -14,9 +15,10 @@ import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
   private final Properties properties;
-  WebDriver wd;
+  private WebDriver wd;
 
   private String browser;
+  private RegistrationHelper registrationHelper;
 
   public ApplicationManager(String browser) {
 
@@ -27,21 +29,12 @@ public class ApplicationManager {
   public void init() throws IOException {
     String target = System.getProperty("target", "local");
     properties.load(new FileReader(String.format("src/test/resources/%s.properties", target)));
-
-
-    if (browser.equals(BrowserType.FIREFOX)){
-      wd = new FirefoxDriver();
-    } else if (browser.equals(BrowserType.CHROME)) {
-      wd = new ChromeDriver();
-    } else if (browser.equals(BrowserType.IE)) {
-      wd = new InternetExplorerDriver();
-    }
-    wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-    wd.get(properties.getProperty("web.baseUrl"));
   }
 
   public void stop() {
-    wd.quit();
+    if (wd != null) {
+      wd.quit();
+    }
   }
 
   public HttpSession newSession(){    // инициализация помощника при каждом обращении (в момент конструирования создается экземпляр помощника)
@@ -50,5 +43,27 @@ public class ApplicationManager {
 
   public String getProperty(String key) {    // в качестве параметра принимает имя свойства, которое нужно извлечь
     return properties.getProperty(key);
+  }
+
+  public RegistrationHelper registration() {    // каждый раз создавать экземпляр класса регистрации необходимости нет, поэтому делаем ленивую инициализацию регистрации (переносить в метод init смысла нет, т.к. там будет запускаться браузер, а мы от этого ушли)
+    if (registrationHelper == null) {
+      registrationHelper = new RegistrationHelper(this);    // в качестве параметра передаём this (ссылку на ApplicationManager); manager нанимает помощника и передаёт ему ссылку на самого себя);
+    }
+    return registrationHelper;
+ }
+
+  public WebDriver getDriver() {
+    if (wd == null) {    // ленивая инициализация (реальная инициализация браузера только, когда к нему кто-то обратится): проверяем инициализирвоан ли браузер
+      if (browser.equals(BrowserType.FIREFOX)){
+        wd = new FirefoxDriver();
+      } else if (browser.equals(BrowserType.CHROME)) {
+        wd = new ChromeDriver();
+      } else if (browser.equals(BrowserType.IE)) {
+        wd = new InternetExplorerDriver();
+      }
+      wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+      wd.get(properties.getProperty("web.baseUrl"));
+    }
+    return wd;
   }
 }
