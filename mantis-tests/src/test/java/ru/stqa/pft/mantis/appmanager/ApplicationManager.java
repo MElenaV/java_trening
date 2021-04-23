@@ -1,13 +1,11 @@
 package ru.stqa.pft.mantis.appmanager;
 
-import javafx.animation.AnimationTimer;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
 
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -19,6 +17,7 @@ public class ApplicationManager {
 
   private String browser;
   private RegistrationHelper registrationHelper;
+  private FtpHelper ftp;
 
   public ApplicationManager(String browser) {
 
@@ -51,6 +50,14 @@ public class ApplicationManager {
     }
     return registrationHelper;
  }
+
+ public FtpHelper ftp() {   // ленивая инициализация (возвращает объект типа FTPHelper в том случае, если объект уже инициализирован; если нет - инициализируем)
+  if (ftp == null) {
+    ftp = new FtpHelper(this);
+  }
+  return ftp;
+ }
+
 
   public WebDriver getDriver() {
     if (wd == null) {    // ленивая инициализация (реальная инициализация браузера только, когда к нему кто-то обратится): проверяем инициализирвоан ли браузер
