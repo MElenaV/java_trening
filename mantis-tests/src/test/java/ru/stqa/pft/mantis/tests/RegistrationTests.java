@@ -13,7 +13,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class RegistrationTests extends TestBase {
 
-  @BeforeMethod
+ // @BeforeMethod
   public void startMailServer() {
     app.mail().start();
   }
@@ -24,8 +24,10 @@ public class RegistrationTests extends TestBase {
     String user = String.format("user%s", now);
     String password = "password";
     String email = String.format("user%s@localhost", now);
-    app.registration().start(user, email);
-    List<MailMessage> mailMessages = app.mail().waitForMail(2, 20000);
+    app.james().createUser(user, password);    // создаем пользователя на внешнем почтовом сервере
+    app.registration().start(user, email);    // выполняется первая часть регистрации
+    //List<MailMessage> mailMessages = app.mail().waitForMail(2, 10000);  //  закомментировали, т.к. письмо будем получать не из встроенного почтового сервера
+    List<MailMessage> mailMessages = app.james().waitForMail(user, password, 60000);  // получаем письмо с внешнего почтового сервера
     String confirmationLink = findConfirmationLink(mailMessages, email); // находим письмо, которое отправлено на этот адрес и извлекаем из него ссылку
     app.registration().finish(confirmationLink, password);
     assertTrue(app.newSession().login(user, password));
@@ -37,7 +39,7 @@ public class RegistrationTests extends TestBase {
     return regex.getText(mailMessage.text);  // возвращает тот кусок текста, который соответствует построенному регулярному выражению
   }
 
-  @AfterMethod (alwaysRun = true)    // alwaysRun = true - чтобы тестовый почтовый сервер останавливался даже тогда, когда тест завершался не успешно
+//  @AfterMethod (alwaysRun = true)    // alwaysRun = true - чтобы тестовый почтовый сервер останавливался даже тогда, когда тест завершался не успешно
   public void stopMailServer() {
     app.mail().stop();
   }
