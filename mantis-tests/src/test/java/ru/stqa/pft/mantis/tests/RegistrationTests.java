@@ -13,7 +13,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 public class RegistrationTests extends TestBase {
 
- // @BeforeMethod
+  @BeforeMethod
   public void startMailServer() {
     app.mail().start();
   }
@@ -39,7 +39,7 @@ public class RegistrationTests extends TestBase {
     return regex.getText(mailMessage.text);  // возвращает тот кусок текста, который соответствует построенному регулярному выражению
   }
 
-//  @AfterMethod (alwaysRun = true)    // alwaysRun = true - чтобы тестовый почтовый сервер останавливался даже тогда, когда тест завершался не успешно
+  @AfterMethod (alwaysRun = true)    // alwaysRun = true - чтобы тестовый почтовый сервер останавливался даже тогда, когда тест завершался не успешно
   public void stopMailServer() {
     app.mail().stop();
   }

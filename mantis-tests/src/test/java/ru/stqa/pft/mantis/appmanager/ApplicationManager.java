@@ -20,6 +20,8 @@ public class ApplicationManager {
   private FtpHelper ftp;
   public MailHelper mailHelper;
   private JamesHelper jamesHelper;
+  private SessionHelper sessionHelper;
+  private DbHelper dbHelper;
 
   public ApplicationManager(String browser) {
 
@@ -30,6 +32,7 @@ public class ApplicationManager {
   public void init() throws IOException {
     String target = System.getProperty("target", "local");
     properties.load(new FileReader(String.format("src/test/resources/%s.properties", target)));
+
   }
 
   public void stop() {
@@ -60,8 +63,9 @@ public class ApplicationManager {
   return ftp;
  }
 
-
   public WebDriver getDriver() {
+    dbHelper = new DbHelper();
+
     if (wd == null) {    // ленивая инициализация (реальная инициализация браузера только, когда к нему кто-то обратится): проверяем инициализирвоан ли браузер
       if (browser.equals(BrowserType.FIREFOX)){
         wd = new FirefoxDriver();
@@ -72,6 +76,8 @@ public class ApplicationManager {
       }
       wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
       wd.get(properties.getProperty("web.baseUrl"));
+
+ //     sessionHelper.login(properties.getProperty("web.adminLogin"), properties.getProperty("web.adminPassword"));
     }
     return wd;
   }
@@ -89,4 +95,16 @@ public class ApplicationManager {
     }
     return jamesHelper;
   }
+
+  public DbHelper db() {
+    return dbHelper;
+  }
+
+  public SessionHelper sessionHelper(){
+    if (sessionHelper == null) {
+      sessionHelper = new SessionHelper(this);
+    }
+    return sessionHelper;
+  }
+
 }
