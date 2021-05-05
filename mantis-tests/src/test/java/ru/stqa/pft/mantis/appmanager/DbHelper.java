@@ -46,13 +46,4 @@ public class DbHelper {
   }
 
 
-  public UserData userByEmail(String email) {
-    Session session = sessionFactory.openSession();
-    session.beginTransaction();
-    List<UserData> result = session.createQuery(String.format("from UserData where email = %s", email)).list();
-    session.getTransaction().commit();
-    session.close();
-    return result.iterator().next();
-  }
-
 }
