@@ -10,9 +10,18 @@ dependencies {
     implementation 'org.apache.httpcomponents:httpclient:4.5.13'
     implementation 'org.apache.httpcomponents:fluent-hc:4.5.13'
     implementation 'com.jayway.restassured:rest-assured:2.9.0'
+    implementation 'org.hibernate:hibernate-core:5.4.29.Final'
+
 }
 
 test {
     useTestNG {
+    }
+    if (project.hasProperty('target')) {
+        systemProperty 'target', "${target}"
+    }
+
+    if (project.hasProperty('verifyUI')) { // включает/отключает проверки через пользовательский интерфейс
+        systemProperty 'veryfyUI', "${veryfyUI}"
     }
 }
