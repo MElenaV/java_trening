@@ -7,6 +7,7 @@ repositories {
 dependencies {
     implementation 'org.testng:testng:7.3.0'
     implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version:'4.0.0-alpha-7'
+    implementation 'org.seleniumhq.selenium:selenium-chrome-driver:4.0.0-beta-3'
     implementation 'org.hamcrest:java-hamcrest:2.0.0.0'
     implementation 'com.beust:jcommander:1.81'
     implementation 'com.thoughtworks.xstream:xstream:1.4.16'
