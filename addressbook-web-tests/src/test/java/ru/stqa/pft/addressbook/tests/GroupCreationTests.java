@@ -67,7 +67,7 @@ public class GroupCreationTests extends TestBase {
   public void testBadGroupCreation() throws Exception {
     app.goTo().groupPage();
     Groups before = app.db().groups();
-    GroupData group = new GroupData().withName("test2'");
+    GroupData group = new GroupData().withName("test2");
     app.group().create(group);
     assertThat(app.group().count(), equalTo(before.size()));        // проверка реализует хеширование (быстрая проверка перед более медленной) теперь не очень нужна, но оставим, чтобы минимально контролировать пользовательский интерфейс
     Groups after = app.db().groups();
