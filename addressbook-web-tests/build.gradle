@@ -20,6 +20,7 @@ dependencies {
     implementation 'org.hibernate:hibernate-core:5.4.29.Final'
     agent 'org.aspectj:aspectjweaver:1.8.0'
     compile 'ru.yandex.qatools.allure:allure-testng-adaptor:1.4.0.RC4'
+    implementation 'org.robotframework:robotframework:4.0.3'
 }
 
 task testGroups (type: Test) {
@@ -63,7 +64,12 @@ task testContacts (type: Test) {
     if (project.hasProperty('verifyUI')) {
         systemProperty 'veryfyUI', "${veryfyUI}"
     }
+}
 
-
+task rf (type: JavaExec) {
+    main = 'org.robotframework.RobotFramework'
+    classpath = sourceSets.test.runtimeClasspath    // будут подключены все библиотеки, что и при запуске тестов
+    args '--outputdir', 'build/rf-report'    // задаём опцию, которая задаёт директорию, куда будет помещен отчет
+    args 'src/test/resources/rf'    // опция, которая задает, где брать запускаемые сценарии
 }
 

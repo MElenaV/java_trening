@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@Listeners(MyTestListener.class)
+@Listeners(MyTestListener.class)    // testng, когда будет выполнять тесты, увидит аннатацию,подключит этот плагин и будет к нему обращаться в нужный момент времени
 public class TestBase {
 
   Logger logger = LoggerFactory.getLogger(TestBase.class);
